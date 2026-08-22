@@ -231,6 +231,7 @@ Unit tests run offline against fake clients. The integration tests are LangChain
 - [OpenAPI specification](https://api.hydrafetch.com/openapi.json)
 - [MCP server and editor setup](https://hydrafetch.com/mcp)
 - [Python client](https://github.com/Hydrafetch/python-sdk) — the client this integration wraps
+- [LlamaIndex reader](https://github.com/Hydrafetch/llama-index-readers-hydrafetch)
 - Other clients: [Node](https://github.com/Hydrafetch/node-sdk) · [Go](https://github.com/Hydrafetch/go-sdk) · [Ruby](https://github.com/Hydrafetch/ruby-sdk) · [Rust](https://github.com/Hydrafetch/rust-sdk) · [PHP](https://github.com/Hydrafetch/php-sdk)
 
 ## License
