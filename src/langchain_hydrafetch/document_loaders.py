@@ -24,6 +24,7 @@ class HydrafetchLoader(BaseLoader):
         timeout: float | None = None,
         max_retries: int | None = None,
         content_format: str = "markdown",
+        raise_for_status: bool = True,
         params: dict[str, Any] | None = None,
     ) -> None:
         if mode not in ("scrape", "crawl", "map"):
@@ -31,6 +32,7 @@ class HydrafetchLoader(BaseLoader):
         self.url = url
         self.mode = mode
         self.content_format = content_format
+        self.raise_for_status = raise_for_status
         self.params = params or {}
         self._client = build_client(api_key, base_url, timeout, max_retries)
 
@@ -43,8 +45,13 @@ class HydrafetchLoader(BaseLoader):
             yield from self._load_crawl()
 
     def _load_scrape(self) -> Iterator[Document]:
-        payload = self._client.scrape(self.url, **self._scrape_params())
-        yield page_to_document(unwrap(payload), self.content_format)
+        data = unwrap(self._client.scrape(self.url, **self._scrape_params()))
+        if self.raise_for_status and not _ok(data):
+            raise ValueError(
+                f"{self.url} returned HTTP {data.get('status')}. The body of an error page is "
+                "not the page you asked for; pass raise_for_status=False to load it anyway."
+            )
+        yield page_to_document(data, self.content_format)
 
     def _load_map(self) -> Iterator[Document]:
         data = unwrap(self._client.map(self.url, **self.params))
@@ -68,6 +75,8 @@ class HydrafetchLoader(BaseLoader):
             if not isinstance(data, dict):
                 continue
             data.setdefault("url", page.get("url") or page.get("requestedUrl"))
+            if self.raise_for_status and not _ok(data):
+                continue
             document = page_to_document(data, self.content_format)
             if page.get("depth") is not None:
                 document.metadata["depth"] = page["depth"]
@@ -77,3 +86,13 @@ class HydrafetchLoader(BaseLoader):
         params = dict(self.params)
         params.setdefault("formats", [self.content_format])
         return params
+
+
+def _ok(data: dict[str, Any]) -> bool:
+    status = data.get("status")
+    if status is None:
+        return True
+    try:
+        return 200 <= int(status) < 300
+    except (TypeError, ValueError):
+        return True

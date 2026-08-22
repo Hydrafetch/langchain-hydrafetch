@@ -128,3 +128,52 @@ def test_lazy_load_does_not_materialise_everything(patch_client) -> None:
     stream = HydrafetchLoader("https://example.com", mode="map", api_key="k").lazy_load()
 
     assert next(stream).page_content == "https://example.com/a"
+
+
+NOT_FOUND_PAYLOAD = {
+    "data": {
+        "url": "https://example.com/gone",
+        "status": 404,
+        "markdown": "# Page Not Found",
+        "metadata": {"title": "Page Not Found"},
+    }
+}
+
+CRAWL_WITH_404 = {
+    "data": {
+        "status": "completed",
+        "pages": [
+            {"url": "https://ex.com/a", "data": {"url": "a", "status": 200, "markdown": "A"}},
+            {"url": "https://ex.com/b", "data": {"url": "b", "status": 404, "markdown": "B"}},
+        ],
+    }
+}
+
+
+def test_scrape_refuses_an_error_page_by_default(patch_client) -> None:
+    patch_client(scrape=NOT_FOUND_PAYLOAD)
+    with pytest.raises(ValueError, match="HTTP 404"):
+        HydrafetchLoader("https://example.com/gone", api_key="k").load()
+
+
+def test_scrape_loads_an_error_page_when_asked(patch_client) -> None:
+    patch_client(scrape=NOT_FOUND_PAYLOAD)
+    docs = HydrafetchLoader("https://example.com/gone", api_key="k", raise_for_status=False).load()
+
+    assert docs[0].metadata["status"] == 404
+
+
+def test_crawl_drops_error_pages_rather_than_failing_the_job(patch_client) -> None:
+    patch_client(crawl=CRAWL_WITH_404)
+    docs = HydrafetchLoader("https://example.com", mode="crawl", api_key="k").load()
+
+    assert [d.page_content for d in docs] == ["A"]
+
+
+def test_crawl_keeps_error_pages_when_asked(patch_client) -> None:
+    patch_client(crawl=CRAWL_WITH_404)
+    docs = HydrafetchLoader(
+        "https://example.com", mode="crawl", api_key="k", raise_for_status=False
+    ).load()
+
+    assert [d.page_content for d in docs] == ["A", "B"]

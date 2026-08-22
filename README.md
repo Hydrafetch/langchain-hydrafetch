@@ -40,6 +40,8 @@ HydrafetchLoader("https://example.com", mode="map").load()
 
 `params` is passed straight through to the API, so anything the endpoint accepts works here. `content_format` chooses what lands in `page_content` — `markdown` by default, or `html`, `rawHtml`, `summary`.
 
+A URL that answers with an error status is refused rather than loaded, because the body of a 404 page is not the page you asked for and a RAG index should not quietly absorb one. In `crawl` mode the error page is dropped and the rest of the crawl is kept. Pass `raise_for_status=False` if you want error pages loaded anyway.
+
 Documents carry `source`, `status`, and whatever page metadata was found: `title`, `description`, `language`, `site_name`, `author`, `published_time`, `word_count`, `page_type`.
 
 Use `lazy_load()` to stream a large crawl instead of building the whole list in memory.
