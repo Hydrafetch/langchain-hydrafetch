@@ -223,7 +223,7 @@ uv run ruff format --check src tests
 uv run pytest -q
 ```
 
-Unit tests run offline against fake clients. The integration tests are LangChain's own `langchain-tests` standard suite; they are skipped unless `HYDRAFETCH_API_KEY` is set, and they spend real credits.
+Unit tests run offline against fake clients. The integration tests are LangChain's own `langchain-tests` standard suite, covering both the tools and the search retriever; they are skipped unless `HYDRAFETCH_API_KEY` is set, and they spend real credits.
 
 ## Links
 
