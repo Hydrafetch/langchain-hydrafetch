@@ -1,6 +1,6 @@
 [project]
 name = "langchain-hydrafetch"
-version = "0.1.0"
+version = "0.2.0"
 description = "LangChain integration for Hydrafetch. Load, search and extract clean web data for agents and RAG."
 readme = "README.md"
 license = "MIT"
