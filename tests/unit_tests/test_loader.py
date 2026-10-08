@@ -20,6 +20,7 @@ SCRAPE_PAYLOAD = {
             "wordCount": 3,
             "pageType": "article",
             "publishedTime": "2026-08-01T00:00:00Z",
+            "modifiedTime": "2026-09-02",
         },
     }
 }
@@ -92,6 +93,7 @@ def test_scrape_mode_maps_content_and_metadata(patch_client) -> None:
     assert docs[0].metadata["title"] == "Example"
     assert docs[0].metadata["site_name"] == "Example"
     assert docs[0].metadata["published_time"] == "2026-08-01T00:00:00Z"
+    assert docs[0].metadata["modified_time"] == "2026-09-02"
     assert docs[0].metadata["status"] == 200
 
 

@@ -15,6 +15,7 @@ _METADATA_KEYS = (
     "siteName",
     "author",
     "publishedTime",
+    "modifiedTime",
     "wordCount",
     "pageType",
     "image",
