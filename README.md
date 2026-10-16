@@ -14,7 +14,7 @@ Load pages as documents, search the web as a retriever, and give agents four too
 pip install langchain-hydrafetch
 ```
 
-Create a key at [app.hydrafetch.com](https://app.hydrafetch.com) and set it:
+Copy your key from [app.hydrafetch.com](https://app.hydrafetch.com) and set it:
 
 ```bash
 export HYDRAFETCH_API_KEY="hf_..."
