@@ -7,6 +7,7 @@ from langchain_tests.unit_tests import ToolsUnitTests
 from langchain_hydrafetch import (
     HydrafetchBrandTool,
     HydrafetchExtractTool,
+    HydrafetchJobSearchTool,
     HydrafetchScrapeTool,
     HydrafetchSearchTool,
 )
@@ -66,3 +67,17 @@ class TestBrandToolUnit(ToolsUnitTests):
     @property
     def tool_invoke_params_example(self) -> dict[str, Any]:
         return {"domain": "stripe.com"}
+
+
+class TestJobSearchToolUnit(ToolsUnitTests):
+    @property
+    def tool_constructor(self) -> type[HydrafetchJobSearchTool]:
+        return HydrafetchJobSearchTool
+
+    @property
+    def tool_constructor_params(self) -> dict[str, Any]:
+        return {"api_key": "test-key"}
+
+    @property
+    def tool_invoke_params_example(self) -> dict[str, Any]:
+        return {"query": "data engineer", "location": "Berlin", "limit": 5}

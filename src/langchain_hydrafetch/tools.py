@@ -156,6 +156,58 @@ class HydrafetchBrandTool(_HydrafetchTool):
         return _dump(unwrap(await self._async().brand(domain)))
 
 
+class JobSearchInput(BaseModel):
+    query: str = Field(description="Words in the job title, for example 'data engineer'.")
+    location: str | None = Field(
+        default=None, description="A city, region or country to match, for example 'Berlin'."
+    )
+    remote_only: bool = Field(default=False, description="Only jobs marked remote.")
+    limit: int = Field(default=10, description="How many jobs to return, up to 100.")
+
+
+class HydrafetchJobSearchTool(_HydrafetchTool):
+    """Search open jobs collected from company career sites and hiring platforms."""
+
+    name: str = "hydrafetch_job_search"
+    description: str = (
+        "Search open jobs from company career sites by the words in the job title, newest first, "
+        "with an optional location and remote filter. Returns title, company, website, location, "
+        "pay when published, and a link to each job. Use this to find who is hiring for a role."
+    )
+    args_schema: type[BaseModel] = JobSearchInput
+
+    def _run(
+        self,
+        query: str,
+        location: str | None = None,
+        remote_only: bool = False,
+        limit: int = 10,
+        run_manager: CallbackManagerForToolRun | None = None,
+    ) -> str:
+        jobs = self._sync().search_jobs(query, **_job_options(location, remote_only, limit))
+        return _dump({"jobs": jobs if isinstance(jobs, list) else []})
+
+    async def _arun(
+        self,
+        query: str,
+        location: str | None = None,
+        remote_only: bool = False,
+        limit: int = 10,
+        run_manager: AsyncCallbackManagerForToolRun | None = None,
+    ) -> str:
+        jobs = await self._async().search_jobs(query, **_job_options(location, remote_only, limit))
+        return _dump({"jobs": jobs if isinstance(jobs, list) else []})
+
+
+def _job_options(location: str | None, remote_only: bool, limit: int) -> dict[str, Any]:
+    options: dict[str, Any] = {"limit": limit}
+    if location:
+        options["location"] = location
+    if remote_only:
+        options["remoteOnly"] = True
+    return options
+
+
 def _extract_options(json_schema: dict[str, Any] | None, prompt: str | None) -> dict[str, Any]:
     options: dict[str, Any] = {}
     if json_schema is not None:

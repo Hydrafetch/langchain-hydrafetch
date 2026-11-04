@@ -5,6 +5,7 @@ from .retrievers import HydrafetchSearchRetriever
 from .tools import (
     HydrafetchBrandTool,
     HydrafetchExtractTool,
+    HydrafetchJobSearchTool,
     HydrafetchScrapeTool,
     HydrafetchSearchTool,
 )
@@ -12,9 +13,10 @@ from .tools import (
 __all__ = [
     "HydrafetchBrandTool",
     "HydrafetchExtractTool",
+    "HydrafetchJobSearchTool",
     "HydrafetchLoader",
     "HydrafetchScrapeTool",
     "HydrafetchSearchRetriever",
     "HydrafetchSearchTool",
 ]
-__version__ = "0.2.0"
+__version__ = "0.3.0"

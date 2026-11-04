@@ -101,6 +101,7 @@ HydrafetchSearchRetriever(search_params={"country": "us"})
 from langchain_hydrafetch import (
     HydrafetchBrandTool,
     HydrafetchExtractTool,
+    HydrafetchJobSearchTool,
     HydrafetchScrapeTool,
     HydrafetchSearchTool,
 )
@@ -110,6 +111,7 @@ tools = [
     HydrafetchScrapeTool(),
     HydrafetchExtractTool(),
     HydrafetchBrandTool(),
+    HydrafetchJobSearchTool(),
 ]
 ```
 
@@ -119,6 +121,7 @@ tools = [
 | `hydrafetch_scrape` | `url` | the page as markdown |
 | `hydrafetch_extract` | `urls`, `json_schema` or `prompt` | JSON with one entry per URL |
 | `hydrafetch_brand` | `domain` | JSON brand record: name, description, tagline, logo assets, colours, fonts, socials |
+| `hydrafetch_job_search` | `query`, `location`, `remote_only`, `limit` | JSON with `jobs`: title, company, website, location, pay, link |
 
 Search finds pages, scrape reads a page you already have. Giving an agent both is the usual setup.
 
@@ -201,6 +204,7 @@ Every class accepts the same connection options, all optional:
 | `hydrafetch_search` | 1 |
 | `hydrafetch_extract` | 5 per URL |
 | `hydrafetch_brand` | 5 |
+| `hydrafetch_job_search` | 1 per 10 jobs returned, free when none |
 
 Failed requests are not billed. Pricing does not vary with page difficulty, so there is no render, stealth or proxy option to set.
 
