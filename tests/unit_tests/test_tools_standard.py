@@ -8,6 +8,7 @@ from langchain_hydrafetch import (
     HydrafetchBrandTool,
     HydrafetchExtractTool,
     HydrafetchJobSearchTool,
+    HydrafetchNewsSearchTool,
     HydrafetchScrapeTool,
     HydrafetchSearchTool,
 )
@@ -81,3 +82,17 @@ class TestJobSearchToolUnit(ToolsUnitTests):
     @property
     def tool_invoke_params_example(self) -> dict[str, Any]:
         return {"query": "data engineer", "location": "Berlin", "limit": 5}
+
+
+class TestNewsSearchToolUnit(ToolsUnitTests):
+    @property
+    def tool_constructor(self) -> type[HydrafetchNewsSearchTool]:
+        return HydrafetchNewsSearchTool
+
+    @property
+    def tool_constructor_params(self) -> dict[str, Any]:
+        return {"api_key": "test-key"}
+
+    @property
+    def tool_invoke_params_example(self) -> dict[str, Any]:
+        return {"query": "acme raises funding", "time_range": "day", "limit": 5}

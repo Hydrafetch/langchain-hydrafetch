@@ -281,14 +281,14 @@ wheels = [
 
 [[package]]
 name = "hydrafetch"
-version = "0.5.0"
+version = "0.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/2f/68/4032b247979b6436e4bd5783702cc742ce46b8110c90e3ee1972b9ae10c7/hydrafetch-0.5.0.tar.gz", hash = "sha256:3fcc6dc9d101fff9650d20fbe3620edf49a627e3a51f6e0ba4a77ee5e6251f4f", size = 40318, upload-time = "2026-11-04T17:56:09.118Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/0b/1c/e8fc784dcb21864101752a79df1e237fc5134164bbf134e4de12aeae8cfe/hydrafetch-0.6.0.tar.gz", hash = "sha256:a255bd59d605264baab878522f9c26cbfcfd0227f9a9743a2a224221c139d07a", size = 40649, upload-time = "2026-11-05T06:09:34.541Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e4/e5/a15a4dd79d69d6daeb1a5b88165b236f35cc5936c2ba0e3dc7696100cd73/hydrafetch-0.5.0-py3-none-any.whl", hash = "sha256:60a60846c78ec4b8d3a9fc06acb65288634d5b3ba1da50f76968ce1e17fa5396", size = 12188, upload-time = "2026-11-04T17:56:07.901Z" },
+    { url = "https://files.pythonhosted.org/packages/28/f5/c15b19098910331e4f8e52be850fc2c65f057f9ffafc92fca01f6251a259/hydrafetch-0.6.0-py3-none-any.whl", hash = "sha256:333f216a1081c00b85c31410674d44dcba635dda1999e66394ea5dc42f4849af", size = 12415, upload-time = "2026-11-05T06:09:33.422Z" },
 ]
 
 [[package]]
@@ -353,7 +353,7 @@ wheels = [
 
 [[package]]
 name = "langchain-hydrafetch"
-version = "0.3.0"
+version = "0.4.0"
 source = { editable = "." }
 dependencies = [
     { name = "hydrafetch" },
@@ -372,7 +372,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "hydrafetch", specifier = ">=0.5.0" },
+    { name = "hydrafetch", specifier = ">=0.6.0" },
     { name = "langchain-core", specifier = ">=1.0,<2" },
     { name = "pydantic", specifier = ">=2" },
 ]

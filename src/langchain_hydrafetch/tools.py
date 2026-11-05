@@ -199,6 +199,53 @@ class HydrafetchJobSearchTool(_HydrafetchTool):
         return _dump({"jobs": jobs if isinstance(jobs, list) else []})
 
 
+class NewsSearchInput(BaseModel):
+    query: str = Field(description="What to find news about, for example 'acme raises funding'.")
+    time_range: str = Field(
+        default="week", description="Only articles from the last 'hour', 'day', 'week' or 'month'."
+    )
+    limit: int = Field(default=10, description="How many articles to return, up to 50.")
+
+
+class HydrafetchNewsSearchTool(_HydrafetchTool):
+    """Find recent news articles, newest first, with outlet and publish time."""
+
+    name: str = "hydrafetch_news_search"
+    description: str = (
+        "Find recent news articles about a query, newest first, within the last hour, day, week "
+        "or month. Returns title, outlet, publish time, snippet and a link to each article. Use "
+        "this for announcements such as funding rounds, acquisitions, launches and leadership "
+        "changes, rather than general web search."
+    )
+    args_schema: type[BaseModel] = NewsSearchInput
+
+    def _run(
+        self,
+        query: str,
+        time_range: str = "week",
+        limit: int = 10,
+        run_manager: CallbackManagerForToolRun | None = None,
+    ) -> str:
+        data = unwrap(self._sync().news(query, timeRange=time_range, limit=limit))
+        return _dump(_news_articles(data))
+
+    async def _arun(
+        self,
+        query: str,
+        time_range: str = "week",
+        limit: int = 10,
+        run_manager: AsyncCallbackManagerForToolRun | None = None,
+    ) -> str:
+        data = unwrap(await self._async().news(query, timeRange=time_range, limit=limit))
+        return _dump(_news_articles(data))
+
+
+def _news_articles(data: dict[str, Any]) -> dict[str, Any]:
+    keep = ("title", "url", "source", "publishedAt", "snippet")
+    articles = data.get("results") if isinstance(data.get("results"), list) else []
+    return {"articles": [{k: a.get(k) for k in keep} for a in articles if isinstance(a, dict)]}
+
+
 def _job_options(location: str | None, remote_only: bool, limit: int) -> dict[str, Any]:
     options: dict[str, Any] = {"limit": limit}
     if location:
