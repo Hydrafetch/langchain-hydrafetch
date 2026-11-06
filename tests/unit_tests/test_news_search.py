@@ -11,7 +11,6 @@ ARTICLE = {
     "source": "Example News",
     "publishedAt": "2026-11-04T10:00:00.000Z",
     "snippet": "Acme raised $10 million.",
-    "imageUrl": "https://example.com/acme.jpg",
     "data": None,
 }
 
